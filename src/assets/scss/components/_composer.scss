@@ -1,0 +1,21 @@
+#htmlview {
+  width: 680px;
+
+  .parts {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: auto;
+    padding: 0;
+    margin: 10px;
+  }
+
+  .downloadLnk {
+    display: none;
+  }
+
+  .downloadBtn {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

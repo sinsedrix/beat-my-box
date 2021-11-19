@@ -1,1 +1,3 @@
-# music-box-composer
+# Beat My Box
+
+Music box composer
