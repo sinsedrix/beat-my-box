@@ -6,4 +6,5 @@ module.exports = [
         { value: "grill-30", text: "Grands Illusions 30"},
         { value: "grill-30f", text: "Grands Illusions 30 (F scale)"},
     ] },
+    { id: "n", name: "nbNotes", type: "number", min: "32", max: "128", step: "8" },
 ];

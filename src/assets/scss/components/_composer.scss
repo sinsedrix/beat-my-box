@@ -7,6 +7,31 @@
     width: auto;
     padding: 0;
     margin: 10px;
+
+    tr.keyline td.current {
+      background-color: #ccffcc44;
+    }
+
+    tr.timeline {
+      & th label:before {
+        background: _palette(fg-bold) !important;
+        border-color: _palette(fg-bold) !important;
+        color: _palette(bg);
+        content: "\f017";
+      }
+      & td.current {
+        background-color: #ccccff66;
+
+        & input[type="radio"]:checked + label {
+          &:before {
+            background: _palette(fg-bold) !important;
+            border-color: _palette(fg-bold) !important;
+            color: _palette(bg);
+            content: "\f0d8";
+          }
+        }
+      }
+    }
   }
 
   .downloadLnk {

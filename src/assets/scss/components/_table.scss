@@ -21,8 +21,13 @@ table {
       border-left: 0;
       border-right: 0;
 
-      &:nth-child(2n + 1) {
-        background-color: _palette(border-bg);
+      td {
+        &:nth-child(8n-2),
+        &:nth-child(8n-1),
+        &:nth-child(8n),
+        &:nth-child(8n + 1) {
+          background-color: _palette(border-bg);
+        }
       }
     }
   }

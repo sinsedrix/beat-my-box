@@ -13,10 +13,11 @@ const engraveStyle = {
     fill: '#000000'
 };
 
-const Composer = ({ keys, parts, onCheck }) => {
+const Composer = ({ keys, parts, nbNotes, time, onCheckPart, onCheckTime }) => {
     let svgRef = createRef()
     let lnkRef = createRef()
-    let inputRefs = useRef({})
+    let partRefs = useRef({})
+    let timeRefs = useRef({})
 
     const getFilename = ({ w, h, d, bt }) => 'beatbox_' + w + 'x' + h + 'x' + d + '_' + bt + '.svg'
     
@@ -52,10 +53,11 @@ const Composer = ({ keys, parts, onCheck }) => {
             </svg>
         </div>
 
-    console.log('parts,keys ', parts, keys)
+    //console.log('parts,keys ', parts, keys)
 
-    const handleClick = (e) => inputRefs.current[e.target.id].click()
-    
+    const handlePartClick = (e) => partRefs.current[e.target.id].click()
+    const handleTimeClick = (e) => timeRefs.current[e.target.id].click()
+
     return (
         <div id="htmlview">
             <div className="parts">
@@ -63,17 +65,25 @@ const Composer = ({ keys, parts, onCheck }) => {
             <tbody>
             {keys.slice().reverse().map(octkeys => 
                 octkeys.slice().reverse().map(key =>
-                    <tr key={key.id}>
+                    <tr key={key.id} className='keyline'>
                         <th>{key.name}<sub>{key.oct}</sub></th>
                         {parts[key.id].map((hole, i) =>
-                            <td key={key.id+i}>
-                                <input ref={el => inputRefs.current[key.id+i] = el} id={key.id+','+i} type="checkbox" checked={hole} onChange={onCheck} />
-                                <label id={key.id+i} onClick={handleClick}></label>
+                            <td key={key.id+i} className={'t'+i===time ? 'current' : ''}>
+                                <input ref={el => partRefs.current[key.id+i] = el} id={key.id+','+i} type="checkbox" checked={hole} onChange={onCheckPart} />
+                                <label id={key.id+i} onClick={handlePartClick}></label>
                             </td>
                         )}
                     </tr>
                 )
             )}
+            <tr className='timeline'><th><label className='icon' /></th>
+            {[...Array(nbNotes).keys()].map(i =>
+                <td key={'t'+i} className={'t'+i===time ? 'current' : ''} >
+                    <input ref={el => timeRefs.current['lt'+i] = el} id={'t'+i} type="radio" checked={'t'+i===time} onChange={onCheckTime} />
+                    <label id={'lt'+i} onClick={handleTimeClick}></label>
+                </td>
+            )}
+            </tr>
             </tbody>
             </table>
             </div>

@@ -7,10 +7,11 @@ const freq = (o, n) => 55*Math.pow(2, o+(n+3)/12)
 
 
 const Boxer = ({ ranges, settings }) => {
-  const initVals = { r: "kikker-15" }
+  const initVals = { r: "kikker-15", n: 64 }
   const [values, setValues] = useState(initVals)
   const [keys, setKeys] = useState([])
   const [parts, setParts] = useState({})
+  const [time, setTime] = useState('t0' )
 
   const computeParts = useCallback(() => {
     let newKeys = ranges.find(rg => rg.id === values.r).range.map(rg =>
@@ -21,33 +22,38 @@ const Boxer = ({ ranges, settings }) => {
         freq: freq(rg.oct, noteNames.indexOf(note))
       })), []
     )
-    console.log('newKeys', newKeys)
+    //console.log('newKeys', newKeys)
     setKeys(newKeys)
 
-    let newParts = newKeys.reduce((o, octk) => ({ ...o, ...octk.reduce((a, key) => ({ ...a, [key.id]: Array(96).fill(false) }), {}) }), {})
-    console.log('newParts', newParts)
+    let newParts = newKeys.reduce((o, octk) => ({ ...o, ...octk.reduce((a, key) => ({ ...a, [key.id]: Array(values.n).fill(false) }), {}) }), {})
+    //console.log('newParts', newParts)
     setParts(newParts)
   }, [values])
 
   useEffect(computeParts, [values])
 
   const handleSettingChange = (event) => {
-    console.log('event', event)
+    console.log('handleSettingChange', event.target)
     setValues({ ...values, [event.target.id]: event.target.value })
   }
 
-  const handleCheck = (event) => {
+  const handleCheckPart = (event) => {
     let [noteid,t] = event.target.id.split(',')
-    console.log('handleCheck', noteid, t)
+    console.log('handleCheckPart', noteid, t)
     let newPart = parts[noteid].slice()
     newPart[t] = !newPart[t]
-    //console.log('newPart', newPart)
     setParts({ ...parts, [noteid]: newPart })
+  }
+
+  const handleCheckTime = (event) => {
+    let t = event.target.id
+    console.log('handleCheckTime', t)
+    setTime(t)
   }
 
   return (
     <div>
-      <Composer keys={keys} parts={parts} onCheck={handleCheck} />
+      <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
       <Settings params={settings} values={values} onChange={handleSettingChange} />
     </div>
   )
