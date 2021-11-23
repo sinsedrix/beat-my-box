@@ -1,5 +1,4 @@
 .settings {
-  display: inline-block;
   margin: 0.5rem;
   padding: 0 1rem 0.5rem;
   border: 4px dotted white;
@@ -8,11 +7,16 @@
     padding: 8px;
   }
 
-  label {
-    display: inline;
-  }
+  .setting {
+    height: 2em;
+    width: 50%;
+    display: inline-block;
+    padding-right: 1em;
 
-  div {
+    label {
+      display: inline;
+    }
+
     input {
       float: right;
       width: 100px;

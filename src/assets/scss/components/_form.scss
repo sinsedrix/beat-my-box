@@ -92,11 +92,11 @@ textarea {
   border-radius: _size(border-radius);
   border: solid _size(border-width) _palette(border);
   color: inherit;
-  display: block;
+  //display: block;
   outline: 0;
   padding: 0 1rem;
   text-decoration: none;
-  width: 100%;
+  //width: 100%;
 
   &:invalid {
     box-shadow: none;

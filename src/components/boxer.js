@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react"
 import Composer from "./composer"
-import Settings from "./settings";
+import Settings from "./settings"
+import Generator from "./generator"
+import Keyboard from "./keyboard"
+import Player from "./player"
 
 const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 const freq = (o, n) => 55*Math.pow(2, o+(n+3)/12)
 
 
 const Boxer = ({ ranges, settings }) => {
-  const initVals = { r: "kikker-15", n: 64 }
+  const initVals = { t: "kikker-15", n: 64, r: 0.5, bpm: 120, w:"triangle", v: 0.3 }
   const [values, setValues] = useState(initVals)
   const [keys, setKeys] = useState([])
   const [parts, setParts] = useState({})
-  const [time, setTime] = useState('t0' )
+  const [time, setTime] = useState(0)
 
   const computeParts = useCallback(() => {
-    let newKeys = ranges.find(rg => rg.id === values.r).range.map(rg =>
+    let newKeys = ranges.find(rg => rg.id === values.t).range.map(rg =>
       rg.notes.map(note => ({
         id: note+rg.oct,
         name: note,
@@ -22,7 +25,7 @@ const Boxer = ({ ranges, settings }) => {
         freq: freq(rg.oct, noteNames.indexOf(note))
       })), []
     )
-    //console.log('newKeys', newKeys)
+    console.log('newKeys', newKeys)
     setKeys(newKeys)
 
     let newParts = newKeys.reduce((o, octk) => ({ ...o, ...octk.reduce((a, key) => ({ ...a, [key.id]: Array(values.n).fill(false) }), {}) }), {})
@@ -46,15 +49,18 @@ const Boxer = ({ ranges, settings }) => {
   }
 
   const handleCheckTime = (event) => {
-    let t = event.target.id
+    let t = parseInt(event.target.id.slice(1))
     console.log('handleCheckTime', t)
     setTime(t)
   }
 
   return (
     <div>
-      <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
       <Settings params={settings} values={values} onChange={handleSettingChange} />
+      <Keyboard keys={keys} volume={values.v} wave={values.w} />
+      <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
+      <Player parts={parts} time={time} />
+      <Generator parts={parts} />
     </div>
   )
 

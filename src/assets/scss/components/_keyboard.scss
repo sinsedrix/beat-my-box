@@ -1,0 +1,48 @@
+#keyboard {
+  width: 680px;
+  height: 110px;
+  white-space: nowrap;
+  margin: 10px;
+
+  .keys {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: auto;
+    padding: 0;
+    margin: 10px;
+
+    .octave {
+      display: inline-block;
+      padding: 0 6px 0 0;
+
+      .key {
+        cursor: pointer;
+        background-color: #cccccc44;
+        border: 1px solid black;
+        border-radius: 0 0 5px 5px;
+        width: 30px;
+        height: 80px;
+        text-align: center;
+        box-shadow: 2px 2px darkgrey;
+        display: inline-block;
+        position: relative;
+        margin-right: 3px;
+        user-select: none;
+
+        div {
+          position: absolute;
+          bottom: 0.2em;
+          text-align: center;
+          width: 100%;
+          pointer-events: none;
+          font-size: 1rem;
+
+          sub {
+            font-size: 0.8rem;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+}

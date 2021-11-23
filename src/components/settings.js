@@ -1,9 +1,10 @@
 import React from "react"
 
 const renderSetting = (param, values, onChange) => {
+    console.log('param', param, values[param.id])
     switch(param.type) {
         case 'select':
-            return (<div key={param.id}>
+            return (<div key={param.id} className="setting">
                 <label htmlFor={param.id}>{param.name} :</label>
                 <select type={param.type} 
                         name={param.name} id={param.id}
@@ -15,7 +16,7 @@ const renderSetting = (param, values, onChange) => {
                 </select>
             </div>)
         case 'number':
-            return (<div key={param.id}>
+            return (<div key={param.id} className="setting">
                 <label htmlFor={param.id}>{param.name} :
                 <input type={param.type} min={param.min} max={param.max} step={param.step}
                         name={param.id} id={param.id}
