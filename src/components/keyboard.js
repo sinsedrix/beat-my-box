@@ -12,38 +12,38 @@ const Keyboard = ({ keys, volume, wave }) => {
 
     useEffect(computeCtx, [volume])
 
-    const computeOscTable = useCallback(() => {
+    const cleanOscTable = useCallback(() => {
         Object.keys(oscTable).forEach(osck => oscTable[osck] && oscTable[osck].stop())
-        let table = keys.reduce((o, octk) => ({ ...o, ...octk.reduce((a, key) => ({ ...a, [key.id]: sound.createOscillator(audioCtx, gain, key.freq, wave ) }), {}) }), {})
-        setOscTable(table)
     }, [keys, gain])
 
-    useEffect(computeOscTable, [keys, wave])
+    useEffect(cleanOscTable, [keys, wave])
 
     const onKeyPressed = (evt) => {
         let kid = evt.target.id
-        if(!oscTable[kid].started) {
-            oscTable[kid].started = true
-            oscTable[kid].start()
+        if(!oscTable[kid]) {
+            let key = keys.reduce((a, oki) =>  a || oki.find(ki => ki.id === kid), null)
+            let osc = sound.createOscillator(audioCtx, gain, key.freq, wave )
+            setOscTable({ ...oscTable, [kid]: osc})
+            osc.start()
         }
     }
 
     const onKeyReleased = (evt) => {
         let kid = evt.target.id
-        if(oscTable[kid].started) {
+        if(oscTable[kid]) {
             oscTable[kid].stop()
-            oscTable[kid].started = false
+            delete oscTable[kid]
         }   
     }
 
     return (
         <div id="keyboard">
             <div className="keys">
-                {keys.map(octkeys => 
+                {keys.map((octkeys, o) => 
                     
-                    <div className="octave">
+                    <div className="octave" key={'o'+o}>
                     {octkeys.map(key =>
-                        <div className="key" id={key.id} onMouseDown={onKeyPressed} onMouseUp={onKeyReleased}>
+                        <div className="key" key={key.id} id={key.id} onMouseDown={onKeyPressed} onMouseUp={onKeyReleased}>
                             <div>{key.name}<sub>{key.oct}</sub></div>
                         </div>
                     )}

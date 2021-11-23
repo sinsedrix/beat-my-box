@@ -1,7 +1,6 @@
 import React from "react"
 
 const renderSetting = (param, values, onChange) => {
-    console.log('param', param, values[param.id])
     switch(param.type) {
         case 'select':
             return (<div key={param.id} className="setting">

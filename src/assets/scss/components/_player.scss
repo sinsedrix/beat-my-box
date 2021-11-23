@@ -1,0 +1,12 @@
+#player {
+  .play label:before {
+    content: "\f04b";
+  }
+  .pause label:before {
+    content: "\f04c";
+  }
+
+  .back label::before {
+    content: "\f048";
+  }
+}

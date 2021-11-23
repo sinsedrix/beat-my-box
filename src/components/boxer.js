@@ -59,7 +59,7 @@ const Boxer = ({ ranges, settings }) => {
       <Settings params={settings} values={values} onChange={handleSettingChange} />
       <Keyboard keys={keys} volume={values.v} wave={values.w} />
       <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
-      <Player parts={parts} time={time} />
+      <Player parts={parts} time={time} setTime={setTime} />
       <Generator parts={parts} />
     </div>
   )

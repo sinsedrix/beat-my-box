@@ -33,7 +33,7 @@ const Composer = ({ keys, parts, nbNotes, time, onCheckPart, onCheckTime }) => {
                         {parts[key.id].map((hole, i) =>
                             <td key={key.id+i} className={i===time ? 'current' : ''}>
                                 <input ref={el => partRefs.current[key.id+i] = el} id={key.id+','+i} type="checkbox" checked={hole} onChange={onCheckPart} />
-                                <label id={key.id+i} onClick={handlePartClick}></label>
+                                <label id={key.id+i} className="icon" onClick={handlePartClick}></label>
                             </td>
                         )}
                     </tr>

@@ -8,15 +8,20 @@
     padding: 0;
     margin: 10px;
 
-    tr.keyline td.current {
-      background-color: #ccffcc44;
+    tr.keyline td {
+      &.current {
+        background-color: #ccffcc44;
+      }
+      & input[type="checkbox"]:checked + label {
+        &:before {
+          padding-left: 0.25em;
+          content: "\f8cf";
+        }
+      }
     }
 
     tr.timeline {
       & th label:before {
-        background: _palette(fg-bold) !important;
-        border-color: _palette(fg-bold) !important;
-        color: _palette(bg);
         content: "\f017";
       }
       & td.current {
@@ -24,9 +29,7 @@
 
         & input[type="radio"]:checked + label {
           &:before {
-            background: _palette(fg-bold) !important;
-            border-color: _palette(fg-bold) !important;
-            color: _palette(bg);
+            padding-left: 0.25em;
             content: "\f0d8";
           }
         }
