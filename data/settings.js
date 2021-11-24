@@ -10,6 +10,8 @@ module.exports = [
     { id: "bpm", name: "tempo", type: "number", min: "60", max: "180", step: "1" },
     { id: "v", name: "volume", type: "number", min: "0", max: "1", step: "0.01" },
     { id: "r", name: "range", type: "number", min: "0.1", max: "0.5", step: "0.01" },
+    { id: "at", name: "attackTime", type: "number", min: "0", max: "0.25", step: "0.01" },
+    { id: "rt", name: "releaseTime", type: "number", min: "0", max: "1", step: "0.1" },
     { id: "w", name: "waveform", type: "select", values: [
         { value: "sine", text: "Sine"},
         { value: "square", text: "Square"},
