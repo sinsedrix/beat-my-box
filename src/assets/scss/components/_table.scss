@@ -26,7 +26,7 @@ table {
         &:nth-child(8n-1),
         &:nth-child(8n),
         &:nth-child(8n + 1) {
-          background-color: _palette(border-bg);
+          background-color: _palette(border-bg-alt);
         }
       }
     }

@@ -12,7 +12,7 @@
       &.current {
         background-color: #ccffcc44;
       }
-      & input[type="checkbox"]:checked + label {
+      input[type="checkbox"]:checked + label {
         &:before {
           padding-left: 0.25em;
           content: "\f8cf";
@@ -21,13 +21,13 @@
     }
 
     tr.timeline {
-      & th label:before {
+      th label:before {
         content: "\f017";
       }
-      & td.current {
+      td.current {
         background-color: #ccccff66;
 
-        & input[type="radio"]:checked + label {
+        input[type="radio"]:checked + label {
           &:before {
             padding-left: 0.25em;
             content: "\f0d8";

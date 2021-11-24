@@ -16,7 +16,7 @@ const Composer = ({ keys, parts, nbNotes, time, onCheckPart, onCheckTime }) => {
     let partRefs = useRef({})
     let timeRefs = useRef({})
 
-    //console.log('parts,keys ', parts, keys)
+    //console.log('Composer', parts, keys, nbNotes)
 
     const handlePartClick = (e) => partRefs.current[e.target.id].click()
     const handleTimeClick = (e) => timeRefs.current[e.target.id].click()

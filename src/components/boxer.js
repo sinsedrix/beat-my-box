@@ -37,7 +37,7 @@ const Boxer = ({ ranges, settings }) => {
 
   const handleSettingChange = (event) => {
     console.log('handleSettingChange', event.target)
-    setValues({ ...values, [event.target.id]: event.target.value })
+    setValues({ ...values, [event.target.id]: Number(event.target.value) })
   }
 
   const handleCheckPart = (event) => {
@@ -49,7 +49,7 @@ const Boxer = ({ ranges, settings }) => {
   }
 
   const handleCheckTime = (event) => {
-    let t = parseInt(event.target.id.slice(1))
+    let t = Number(event.target.id.slice(1))
     console.log('handleCheckTime', t)
     setTime(t)
   }
