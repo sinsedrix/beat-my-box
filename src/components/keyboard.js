@@ -22,7 +22,7 @@ const Keyboard = ({ keys, volume, wave }) => {
         let kid = evt.target.id
         if(!oscTable[kid]) {
             let key = keys.reduce((a, oki) =>  a || oki.find(ki => ki.id === kid), null)
-            let osc = sound.createOscillator(audioCtx, gain, key.freq, wave )
+            let osc = sound.createOscillator(audioCtx, gain, key.freq, wave)
             setOscTable({ ...oscTable, [kid]: osc})
             osc.start()
         }

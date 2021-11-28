@@ -10,7 +10,7 @@ const freq = (o, n) => 55*Math.pow(2, o+(n+3)/12)
 
 
 const Boxer = ({ ranges, settings }) => {
-  const initVals = { t: "kikker-15", n: 64, r: 0.5, bpm: 120, w:"triangle", v: 0.3, at: 0.01, rt: 0.5 }
+  const initVals = { t: "kikker-15", n: 64, bpm: 120, w:"triangle", v: 0.3 }
   const [values, setValues] = useState(initVals)
   const [keys, setKeys] = useState([])
   const [parts, setParts] = useState({})
@@ -59,7 +59,7 @@ const Boxer = ({ ranges, settings }) => {
       <Settings params={settings} values={values} onChange={handleSettingChange} />
       <Keyboard keys={keys} volume={values.v} wave={values.w} />
       <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
-      <Player keys={keys} parts={parts} time={time} setTime={setTime} nbNotes={values.n} tempo={values.t} attackTime={values.at} releaseTime={values.rt} />
+      <Player keys={keys} parts={parts} time={time} setTime={setTime} volume={values.v} nbNotes={values.n} tempo={values.bpm} wave={values.w} />
       <Generator parts={parts} />
     </div>
   )

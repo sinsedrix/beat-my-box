@@ -1,79 +1,73 @@
-import React, { createRef, useRef, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import * as sound from "../sound"
 
-const Player = ({ keys, parts, time, setTime, nbNotes, tempo, wave, customWaveform, attackTime, releaseTime }) => {
+const Player = ({ keys, parts, time, setTime, volume, nbNotes, tempo, wave }) => {
     const [audioCtx, setAudioCtx] = useState(sound.createAudioContext())
     const [playing, setPlaying] = useState(false)
     const [timerId, setTimerId] = useState(null)
-    const [noteTime, setNoteTime] = useState(0.0)
-    const lookahead = 25.0 // How frequently to call scheduling function (in milliseconds)
-    const scheduleAheadTime = 0.1 // How far ahead to schedule audio (sec)
-    const beepLength = 1;
+    const beepLength = 1
 
-    const runScheduler = () => {
-        // while there are notes that will need to play before the next interval,
-        // schedule them and advance the pointer.
-        while (noteTime < audioCtx.currentTime + scheduleAheadTime ) {
-            scheduleNote()
-            nextNote()
-        }
-        setTimerId(window.setTimeout(runScheduler, lookahead))
+    useEffect(() => {
+        if(playing) run()
+        else window.clearTimeout(timerId)
+    }, [playing])
+
+    useEffect(() => {
+        if(playing) playNotes(time)
+    }, [time])
+
+    const run = () => {
+        const secondsPerBeat = 60.0 / tempo / 4
+        
+        setTime(prev => (prev+1)%nbNotes)
+        
+        if(playing)
+            setTimerId(window.setTimeout(run, secondsPerBeat*1000))
     }
 
-    const nextNote = () => {
-        const secondsPerBeat = 60.0 / tempo    
-        setNoteTime(noteTime + secondsPerBeat / 8) // Add beat length to last beat time      
-        // Advance the beat number, wrap to zero
-        setTime((time+1)%nbNotes)
-    }
-
-    const scheduleNote = () => {      
+    const playNotes = (t) => {    
+        const noteTime = audioCtx.currentTime  
         for(let kid in parts) {
             let part = parts[kid]
-            if(part[time]) {
+            if(part[t]) {
                 let key = keys.reduce((a, octkeys) => a || octkeys.find(octk => octk.id === kid), null)
-                console.log('scheduleNote', key)
-                playBeep(time, key.freq)
+                playNote(noteTime, key.freq)
             }
         }
     }
     
-    const playBeep = (freq) => {
+    const playNote = (noteTime, freq) => {
+        const sweepEnv = audioCtx.createGain()
+        //sweepEnv.gain.cancelScheduledValues(noteTime)
+        //sweepEnv.gain.setValueAtTime(0, noteTime)
+        sweepEnv.gain.linearRampToValueAtTime(volume, noteTime + 0.1)
+        sweepEnv.gain.linearRampToValueAtTime(0, noteTime + 0.5)
         const osc = audioCtx.createOscillator()
-      
-        if (wave == "custom") {
-          osc.setPeriodicWave(customWaveform)
-        } else {
-          osc.type = wave
-        }
-      
+        osc.type = wave
         osc.frequency.value = freq
-      
-        const beepEnv = audioCtx.createGain()
-        beepEnv.gain.cancelScheduledValues(noteTime)
-        beepEnv.gain.setValueAtTime(0, noteTime)
-        beepEnv.gain.linearRampToValueAtTime(1, noteTime + attackTime)
-        beepEnv.gain.linearRampToValueAtTime(0, noteTime + beepLength - releaseTime)
-      
-        osc.connect(beepEnv).connect(audioCtx.destination)
+
+        osc.connect(sweepEnv).connect(audioCtx.destination);
         osc.start(noteTime)
-        osc.stop(noteTime + beepLength)
+        osc.stop(noteTime + beepLength / 4)
+        console.log('playNote', freq, volume) 
     }
 
     const handlePlayPause = (evt) => {
-        if (!playing) {
+        if(!audioCtx) {
+            alert("No audio context")
+        } else if (!playing) {
             // check if context is in suspended state (autoplay policy)
             if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
+                audioCtx.resume()
             }
-
-            setTime(0);
-            setNoteTime(audioCtx.currentTime)
-            runScheduler() // kick off scheduling
+            setPlaying(true)
         } else {
-            window.clearTimeout(timerId);
+            setPlaying(false)
         }
-        setPlaying(!playing)
+    } 
+
+    const handleInit = (evt) => {
+        setAudioCtx(sound.createAudioContext())
     } 
 
     const handleBack = (evt) => {
@@ -82,6 +76,7 @@ const Player = ({ keys, parts, time, setTime, nbNotes, tempo, wave, customWavefo
 
     return (
         <div id="player">
+            {/*<button className="init" onClick={handleInit}><label className="icon"></label></button>*/}
             <button className={playing ? "pause":"play"} onClick={handlePlayPause}><label className="icon"></label></button>
             <button className="back" onClick={handleBack}><label className="icon"></label></button>
         </div>
