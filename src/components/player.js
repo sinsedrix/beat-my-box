@@ -1,35 +1,41 @@
 import React, { useEffect, useState, useCallback } from "react"
 import * as sound from "../sound"
 
-const Player = ({ keys, parts, time, setTime, volume, nbNotes, tempo, wave }) => {
-    const [audioCtx, setAudioCtx] = useState(sound.createAudioContext())
+const Player = ({ keys, parts, setNoteIndex, volume, nbNotes, tempo, wave }) => {
     const [playing, setPlaying] = useState(false)
-    const [timerId, setTimerId] = useState(null)
+    let isPlaying = false
+    const audioCtx = sound.createAudioContext()
     const beepLength = 1
+    const lookahead = 25.0; // How frequently to call scheduling function (in milliseconds)
+    const scheduleAheadTime = 0.1; // How far ahead to schedule audio (sec)
+    let timerId = 0
+    let currentNote = 0; // The note we are currently playing
+    let nextNoteTime = 0.0; // when the next note is due.
 
-    useEffect(() => {
-        if(playing) run()
-        else window.clearTimeout(timerId)
-    }, [playing])
-
-    useEffect(() => {
-        if(playing) playNotes(time)
-    }, [time])
-
-    const run = () => {
-        const secondsPerBeat = 60.0 / tempo / 4
+    const nextNote = () => {
+        const secondsPerBeat = 60.0 / tempo / 2;
         
-        setTime(prev => (prev+1)%nbNotes)
-        
-        if(playing)
-            setTimerId(window.setTimeout(run, secondsPerBeat*1000))
+        nextNoteTime += secondsPerBeat; // Add beat length to last beat time
+        currentNote = (currentNote+1)%nbNotes; // Advance the beat number, wrap to zero
+        //setNoteIndex(currentNote)
     }
 
-    const playNotes = (t) => {    
-        const noteTime = audioCtx.currentTime  
+    const play = () => {
+        //console.log('play', isPlaying, nextNoteTime, audioCtx.currentTime + scheduleAheadTime)  
+        if(isPlaying) {
+            while(isPlaying && nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+                playNotes()
+                nextNote()
+            }
+            timerId = window.setTimeout(play, lookahead)
+        }
+    }
+
+    const playNotes = () => {    
+        const noteTime = nextNoteTime  
         for(let kid in parts) {
             let part = parts[kid]
-            if(part[t]) {
+            if(part[currentNote]) {
                 let key = keys.reduce((a, octkeys) => a || octkeys.find(octk => octk.id === kid), null)
                 playNote(noteTime, key.freq)
             }
@@ -52,32 +58,37 @@ const Player = ({ keys, parts, time, setTime, volume, nbNotes, tempo, wave }) =>
         console.log('playNote', freq, volume) 
     }
 
-    const handlePlayPause = (evt) => {
-        if(!audioCtx) {
-            alert("No audio context")
-        } else if (!playing) {
+    const handlePlay = (evt) => {
+        if (!isPlaying) {
             // check if context is in suspended state (autoplay policy)
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume()
             }
-            setPlaying(true)
-        } else {
-            setPlaying(false)
+            nextNoteTime = audioCtx.currentTime
+            isPlaying = true
+            play()
+            //setPlaying(true)
         }
     } 
 
-    const handleInit = (evt) => {
-        setAudioCtx(sound.createAudioContext())
+    const handlePause = (evt) => {
+        if(isPlaying) {
+            window.clearTimeout(timerId)
+            isPlaying = false
+            //setPlaying(false)
+        }
     } 
 
     const handleBack = (evt) => {
-        setTime(0)
+        currentNote = 0
+        nextNoteTime = audioCtx.currentTime
+        //setNoteIndex(currentNote)
     } 
 
     return (
         <div id="player">
-            {/*<button className="init" onClick={handleInit}><label className="icon"></label></button>*/}
-            <button className={playing ? "pause":"play"} onClick={handlePlayPause}><label className="icon"></label></button>
+            <button className={"play"} onClick={handlePlay}><label className="icon"></label></button>
+            <button className={"pause"} onClick={handlePause}><label className="icon"></label></button>
             <button className="back" onClick={handleBack}><label className="icon"></label></button>
         </div>
     )

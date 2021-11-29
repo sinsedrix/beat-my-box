@@ -29,7 +29,7 @@ let nextNoteTime = 0.0; // when the next note is due.
 function nextNote() {
   const secondsPerBeat = 60.0 / tempo;
 
-  nextNoteTime += secondsPerBeat / 8; // Add beat length to last beat time
+  nextNoteTime += secondsPerBeat / 2; // Add beat length to last beat time
 
   // Advance the beat number, wrap to zero
   currentNote = (currentNote+1)%96;

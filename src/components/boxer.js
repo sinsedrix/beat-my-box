@@ -14,7 +14,7 @@ const Boxer = ({ ranges, settings }) => {
   const [values, setValues] = useState(initVals)
   const [keys, setKeys] = useState([])
   const [parts, setParts] = useState({})
-  const [time, setTime] = useState(0)
+  const [noteIndex, setNoteIndex] = useState(0)
 
   const computeParts = useCallback(() => {
     let newKeys = ranges.find(rg => rg.id === values.t).range.map(rg =>
@@ -51,15 +51,15 @@ const Boxer = ({ ranges, settings }) => {
   const handleCheckTime = (event) => {
     let t = Number(event.target.id.slice(1))
     console.log('handleCheckTime', t)
-    setTime(t)
+    setNoteIndex(t)
   }
 
   return (
     <div>
       <Settings params={settings} values={values} onChange={handleSettingChange} />
       <Keyboard keys={keys} volume={values.v} wave={values.w} />
-      <Composer keys={keys} parts={parts} time={time} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
-      <Player keys={keys} parts={parts} time={time} setTime={setTime} volume={values.v} nbNotes={values.n} tempo={values.bpm} wave={values.w} />
+      <Composer keys={keys} parts={parts} noteIndex={noteIndex} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
+      <Player keys={keys} parts={parts} setNoteIndex={setNoteIndex} volume={values.v} nbNotes={values.n} tempo={values.bpm} wave={values.w} />
       <Generator parts={parts} />
     </div>
   )
