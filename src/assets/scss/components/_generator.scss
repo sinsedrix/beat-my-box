@@ -3,4 +3,10 @@
   .exportJsonLnk {
     display: none;
   }
+
+  label.file {
+    input[type="file"] {
+      display: none;
+    }
+  }
 }

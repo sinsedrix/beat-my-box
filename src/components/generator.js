@@ -3,7 +3,7 @@ import siteConfig from '../../data/siteConfig'
 
 const getFilename = () => 'beat_my_box'
 
-const Generator = ({parts}) => {
+const Generator = ({parts, setParts}) => {
     let svgRef = createRef()
     let svgLnkRef = createRef()
     let jsonLnkRef = createRef()
@@ -24,7 +24,7 @@ const Generator = ({parts}) => {
     const exportJson = () => {
         var json = parts;
         var type = 'application/json';
-        var uri = 'data:' + type + ';utf8,' + encodeURIComponent(JSON.stringify(json, null, '\t'));
+        var uri = 'data:' + type + ';utf8,' + encodeURIComponent(JSON.stringify(json, null, ' '));
         var name = getFilename()+'.json';
     
         var link = jsonLnkRef.current;
@@ -34,16 +34,16 @@ const Generator = ({parts}) => {
         link.click();
     };
         
-    const importJson = (e) => {
-        var file = e.target.files[0];
+    const importJson = (evt) => {
+        var file = evt.target.files[0];
         if (!file) {
           return;
         }
         var reader = new FileReader();
-        reader.onload = function(e) {
-          var contents = e.target.result;
-          console.log('importJson', contents);
-          setParts(JSON.parse(contents));
+        reader.onload = (e) => {
+          var impParts = JSON.parse(e.target.result);
+          console.log('importJson', impParts);
+          setParts(impParts);
         };
         reader.readAsText(file);
     };
@@ -75,7 +75,10 @@ const Generator = ({parts}) => {
             <a className="exportJsonLnk" ref={jsonLnkRef} href="/">Export JSON link</a>
             <button className="exportJsonBtn" onClick={exportJson}>Export JSON</button>
 
-            <input type="file" className="importJsonBtn" onClick={importJson} />
+            <label className="button file">
+                <input type="file" onChange={importJson} />
+                Import JSON
+            </label>
         </div>)
 }
 
