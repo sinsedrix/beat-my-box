@@ -29,7 +29,7 @@ const Boxer = ({ ranges, settings }) => {
     setKeys(newKeys)
 
     let newParts = newKeys.reduce((o, octk) => ({ ...o, ...octk.reduce((a, key) => ({ ...a, [key.id]: Array(values.n).fill(false) }), {}) }), {})
-    Object.keys(newParts).forEach(k => newParts[k].forEach((v,i) => newParts[k][i] = i < parts[k].length ? parts[k][i] : false))
+    Object.keys(newParts).forEach(k => newParts[k].forEach((v,i) => newParts[k][i] = i < (parts[k] ? parts[k].length : 0) ? parts[k][i] : false))
     //console.log('newParts', newParts)
     setParts(newParts)
   }, [values])
@@ -61,7 +61,7 @@ const Boxer = ({ ranges, settings }) => {
       <Keyboard keys={keys} volume={values.v} wave={values.w} />
       <Composer keys={keys} parts={parts} noteIndex={noteIndex} nbNotes={values.n} onCheckPart={handleCheckPart} onCheckTime={handleCheckTime} />
       <Player keys={keys} parts={parts} setNoteIndex={setNoteIndex} volume={values.v} nbNotes={values.n} tempo={values.bpm} wave={values.w} />
-      <Generator parts={parts} setParts={setParts} />
+      <Generator parts={parts} setParts={setParts} nbNotes={values.n} />
     </div>
   )
 
