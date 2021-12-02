@@ -27,7 +27,7 @@ const Player = ({ keys, parts, setNoteIndex, volume, nbNotes, tempo, wave }) => 
                 playNotes()
                 nextNote()
             }
-            timerId = window.setTimeout(play, lookahead)
+            timerId = setTimeout(play, lookahead)
         }
     }
 
@@ -73,7 +73,7 @@ const Player = ({ keys, parts, setNoteIndex, volume, nbNotes, tempo, wave }) => 
 
     const handlePause = (evt) => {
         if(isPlaying) {
-            window.clearTimeout(timerId)
+            clearTimeout(timerId)
             isPlaying = false
             //setPlaying(false)
         }

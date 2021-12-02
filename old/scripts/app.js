@@ -62,7 +62,7 @@ function scheduler() {
       scheduleNote(currentNote, nextNoteTime);
       nextNote();
   }
-  timerID = window.setTimeout(scheduler, lookahead);
+  timerID = setTimeout(scheduler, lookahead);
 }
 
 function freq(o, n) {
@@ -112,7 +112,7 @@ if (!Object.entries) {
 }
 
 function init() {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  audioCtx = typeof window !== "undefined" ? new (window.AudioContext || window.webkitAudioContext)() : null;
   mainGainNode = audioCtx.createGain();
   mainGainNode.connect(audioCtx.destination);
   mainGainNode.gain.value = volumeControl.value;
@@ -153,7 +153,7 @@ function setup() {
       //requestAnimationFrame(draw); // start the drawing loop.
       ev.target.dataset.playing = 'true';
     } else {
-      window.clearTimeout(timerID);
+      clearTimeout(timerID);
       ev.target.dataset.playing = 'false';
     }
   });

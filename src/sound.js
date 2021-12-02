@@ -1,5 +1,5 @@
 
-export const createAudioContext = () => new (window.AudioContext || window.webkitAudioContext)();
+export const createAudioContext = () => typeof window !== "undefined" ? new (window.AudioContext || window.webkitAudioContext)() : null;
 
 export const createOscillator = (audioCtx, gain, freq, wave, customWaveform) => {
     let osc = audioCtx.createOscillator();
