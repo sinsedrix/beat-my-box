@@ -8,10 +8,18 @@
     padding: 0;
     margin: 10px;
 
+    th {
+      position: absolute;
+      width: 5em;
+      left: 0;
+      top: auto;
+    }
+
     tr.keyline td {
       &.current {
         background-color: #ccffcc44;
       }
+
       input[type="checkbox"]:checked + label {
         &:before {
           padding-left: 0.25em;

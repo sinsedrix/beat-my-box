@@ -170,9 +170,7 @@ input[type="radio"] {
     display: inline-block;
     font-size: 0.8rem;
     font-weight: _font(weight);
-    margin: 0 0 (_size(element-margin) * 0.25) 0;
-    padding-left: (_size(element-height) * 0.6);
-    padding-right: 0.75rem;
+    width: 1.8em;
     position: relative;
 
     &:before {
@@ -189,13 +187,14 @@ input[type="radio"] {
       content: "";
       display: inline-block;
       height: (_size(element-height) * 0.6);
-      left: 0.5em;
+      left: -0.25em;
       //line-height: (_size(element-height) * 0.575);
       line-height: calc(#{_size(element-height) * 0.575} + 0em);
       position: absolute;
       text-align: center;
-      top: -0.4rem;
+      top: -1.25rem;
       width: (_size(element-height) * 0.6);
+      margin: 0.25em;
     }
   }
 
